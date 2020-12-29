@@ -5,10 +5,14 @@ import {
   Text,
   View,
   FlatList,
+  TouchableHighlight
 } from 'react-native';
 import Cita from './componentes/Cita'
+import Formulario from './componentes/Formulario';
 
 const App = () => {
+
+  const [mostrarForm, guardarMostrarForm] = useState(false);
 
   //definir el state de citas
   const [citas, setCitas] = useState([
@@ -24,16 +28,36 @@ const App = () => {
     })
   }
 
+  //mostrar u ocultar el formulario
+  const mostrarFormulario = () => {
+    guardarMostrarForm(!mostrarForm);
+  }
+
   return (
     <View style={styles.contenedor}>
-      <Text style={styles.encabezado}>Administrador de Citas</Text>
-      <Text style={styles.encabezado}>{citas.length > 0 ? 'Administra tus citas' : 'No hay citas, agrega una'}</Text>
+      <View style={styles.contenido}>
+        <Text style={styles.encabezado}>Administrador de Citas</Text>
 
-      <FlatList
-        data={citas}
-        renderItem={({ item }) => <Cita item={item} eliminarPaciente={eliminarPaciente} />}
-        keyExtractor={cita => cita.id}
-      />
+        <View>
+          <TouchableHighlight onPress={() => mostrarFormulario()} style={styles.btMostrarForm}>
+            <Text style={styles.textMostrarForm}>Crear Nueva Cita</Text>
+          </TouchableHighlight>
+        </View>
+
+        {mostrarForm ? (
+          <Formulario />
+        ) : (
+            <>
+              <Text style={styles.encabezado}>{citas.length > 0 ? 'Administra tus citas' : 'No hay citas, agrega una'}</Text>
+              <FlatList
+                style={styles.listado}
+                data={citas}
+                renderItem={({ item }) => <Cita item={item} eliminarPaciente={eliminarPaciente} />}
+                keyExtractor={cita => cita.id}
+              />
+            </>
+          )}
+      </View>
     </View>
   );
 };
@@ -50,6 +74,23 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontWeight: 'bold',
     color: 'white',
+  },
+  contenido: {
+    flex: 1,
+    marginHorizontal: '2.5%'
+  },
+  listado: {
+    flex: 1
+  },
+  btMostrarForm: {
+    backgroundColor: '#7d024e',
+    padding: 10,
+    marginVertical: 10
+  },
+  textMostrarForm: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: 'bold'
   }
 });
 
