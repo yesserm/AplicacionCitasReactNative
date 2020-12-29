@@ -5,7 +5,8 @@ import {
   Text,
   View,
   FlatList,
-  TouchableHighlight
+  TouchableHighlight,
+  Platform
 } from 'react-native';
 import Cita from './componentes/Cita'
 import Formulario from './componentes/Formulario';
@@ -45,7 +46,14 @@ const App = () => {
         </View>
 
         {mostrarForm ? (
-          <Formulario />
+          <>
+            <Text style={styles.encabezado}>Crea una nueva cita</Text>
+            <Formulario 
+              citas={citas}
+              setCitas={setCitas}
+              guardarMostrarForm={guardarMostrarForm}
+            />
+          </>
         ) : (
             <>
               <Text style={styles.encabezado}>{citas.length > 0 ? 'Administra tus citas' : 'No hay citas, agrega una'}</Text>
@@ -70,7 +78,7 @@ const styles = StyleSheet.create({
   encabezado: {
     textAlign: 'center',
     fontSize: 25,
-    marginTop: 10,
+    marginTop: Platform.OS === 'ios' ? 40 : 10,
     marginBottom: 10,
     fontWeight: 'bold',
     color: 'white',
